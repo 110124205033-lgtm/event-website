@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aalim Muhammed Salegh College - ERP Attendance Sheet</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="erp-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-placeholder">
+                    <span class="logo-text">AMS</span>
+                </div>
+                <div class="college-info">
+                    <h1>Aalim Muhammed Salegh College of Engineering</h1>
+                    <p class="erp-title">ERP Attendance Management System</p>
+                </div>
+                <div>
+                     <!-- <h1>IT DEPARTNMENT</h1> -->
+                </div>
+            </div>
+            <div class="erp-info">
+                <div class="info-item">
+                    <span class="label">Academic Year:</span>
+                    <span class="value">2024-2025</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Semester:</span>
+                    <span class="value">Odd Semester</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="erp-container">
+            <!-- Faculty Controls -->
+            <div class="faculty-controls">
+                <div class="control-group">
+                    <label for="departmentFilter">Department:</label>
+                    <select id="departmentFilter" onchange="filterByDepartment()">
+                        <option value="all">All Departments</option>
+                        <!-- <option value="CSE">Computer Science</option> -->
+                        <option value="IT">Information Technology</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="sessionSelect">Session:</label>
+                    <select id="sessionSelect" onchange="updateTableHeader()">
+                        <option value="">Select Session</option>
+                        <option value="Morning">Morning Session</option>
+                        <option value="Afternoon">Afternoon Session</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="attendanceDate">Date:</label>
+                    <input type="date" id="attendanceDate" onchange="updateTableHeader()">
+                </div>
+
+                <button class="btn-primary" onclick="markAllPresent()">Mark All Present</button>
+                <button class="btn-secondary" onclick="resetAll()">Reset All</button>
+            </div>
+
+            <!-- Attendance Table -->
+            <div class="table-container">
+                <table id="attendanceTable" class="erp-table">
+                    <thead>
+                        <tr>
+                            <th class="sno">S.No</th>
+                            <th class="reg-no">Register Number</th>
+                            <th class="student-name">Student Name</th>
+                            <th class="age">Age</th>
+                            <th class="session">Session</th>
+                            <th class="date">Date</th>
+                            <th class="status">Attendance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample IT Department student data - in real ERP, this would come from database -->
+                        <tr>
+                            <td>1</td>
+                            <td>21IT001</td>
+                            <td>Arun Kumar</td>
+                            <td>20</td>
+                            <td id="session-cell-1">-</td>
+                            <td id="date-cell-1">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT001" data-name="Arun Kumar" data-age="20">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>21IT002</td>
+                            <td>Balaji Ramesh</td>
+                            <td>19</td>
+                            <td id="session-cell-2">-</td>
+                            <td id="date-cell-2">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT002" data-name="Balaji Ramesh" data-age="19">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>21IT003</td>
+                            <td>Chitra Devi</td>
+                            <td>20</td>
+                            <td id="session-cell-3">-</td>
+                            <td id="date-cell-3">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT003" data-name="Chitra Devi" data-age="20">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>21IT004</td>
+                            <td>Dinesh Kumar</td>
+                            <td>21</td>
+                            <td id="session-cell-4">-</td>
+                            <td id="date-cell-4">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT004" data-name="Dinesh Kumar" data-age="21">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>21IT005</td>
+                            <td>Eswari Lakshmi</td>
+                            <td>19</td>
+                            <td id="session-cell-5">-</td>
+                            <td id="date-cell-5">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT005" data-name="Eswari Lakshmi" data-age="19">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>21IT006</td>
+                            <td>Fathima Beevi</td>
+                            <td>20</td>
+                            <td id="session-cell-6">-</td>
+                            <td id="date-cell-6">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT006" data-name="Fathima Beevi" data-age="20">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>21IT007</td>
+                            <td>Ganesh Prasad</td>
+                            <td>21</td>
+                            <td id="session-cell-7">-</td>
+                            <td id="date-cell-7">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT007" data-name="Ganesh Prasad" data-age="21">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>21IT008</td>
+                            <td>Hema Latha</td>
+                            <td>19</td>
+                            <td id="session-cell-8">-</td>
+                            <td id="date-cell-8">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT008" data-name="Hema Latha" data-age="19">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>21IT009</td>
+                            <td>Rajesh Kumar</td>
+                            <td>20</td>
+                            <td id="session-cell-9">-</td>
+                            <td id="date-cell-9">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT009" data-name="Rajesh Kumar" data-age="20">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>21IT010</td>
+                            <td>Saranya Devi</td>
+                            <td>19</td>
+                            <td id="session-cell-10">-</td>
+                            <td id="date-cell-10">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT010" data-name="Saranya Devi" data-age="19">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>21IT011</td>
+                            <td>Venkatesh Iyer</td>
+                            <td>21</td>
+                            <td id="session-cell-11">-</td>
+                            <td id="date-cell-11">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT011" data-name="Venkatesh Iyer" data-age="21">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>21IT012</td>
+                            <td>Priya Sharma</td>
+                            <td>20</td>
+                            <td id="session-cell-12">-</td>
+                            <td id="date-cell-12">-</td>
+                            <td>
+                                <select class="status-select" data-student="21IT012" data-name="Priya Sharma" data-age="20">
+                                    <option value="">Select</option>
+                                    <option value="Present">Present</option>
+                                    <option value="Absent">Absent</option>
+                                    <option value="OD">OD</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-primary" onclick="saveAttendance()">
+                    <span class="btn-icon">💾</span>
+                    Save Attendance
+                </button>
+                <button class="btn-export" onclick="exportToExcel()">
+                    <span class="btn-icon">📊</span>
+                    Export to Excel
+                </button>
+            </div>
+
+            <!-- Statistics -->
+            <div class="attendance-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Total Students:</span>
+                    <span class="stat-value" id="totalStudents">12</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Present:</span>
+                    <span class="stat-value present-count" id="presentCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Absent:</span>
+                    <span class="stat-value absent-count" id="absentCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">OD:</span>
+                    <span class="stat-value od-count" id="odCount">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal">
+            <div class="modal-content success-modal">
+                <div class="modal-header">
+                    <div class="success-icon">✅</div>
+                    <h3>Attendance Saved Successfully!</h3>
+                </div>
+                <div id="modalDetails" class="modal-details">
+                    <!-- Details will be inserted here -->
+                </div>
+                <button class="modal-close-btn" onclick="closeModal()">Continue</button>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>Saving attendance data...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="erp-footer">
+        <p>&copy; 2024 Aalim Muhammed Salegh College of Engineering - ERP Attendance Management System</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

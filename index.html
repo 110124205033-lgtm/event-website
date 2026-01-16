@@ -16,13 +16,22 @@
                     <span class="logo-text">AMS</span>
                 </div>
                 <div class="college-info">
-                    <h1>Aalim Muhammed Salegh College of Engineering</h1>
-                    <p class="erp-title">ERP Attendance Management System</p>
-                </div>
-                <div>
-                     <!-- <h1>IT DEPARTNMENT</h1> -->
+                    <h1><u>Aalim Muhammed Salegh College of Engineering</u></h1>
+                    <p class="erp-title"><u>ERP Attendance Management System</u></p>
                 </div>
             </div>
+
+            <!-- Navigation Menu -->
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('student-details')">Student Details</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link active" onclick="showSection('attendance-entry')">Attendance Entry</a></li>
+                    <!-- <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('attendance-history')">Attendance History</a></li> -->
+                    <li class="nav-item"><a href="#" class="nav-link" onclick="showSection('reports')">Reports</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link" onclick="logout()">Logout</a></li>
+                </ul>
+            </nav>
+
             <div class="erp-info">
                 <div class="info-item">
                     <span class="label">Academic Year:</span>
@@ -32,11 +41,46 @@
                     <span class="label">Semester:</span>
                     <span class="value">Odd Semester</span>
                 </div>
+                <!-- Faculty info will be inserted here by JavaScript -->
             </div>
         </div>
     </header>
 
-    <main>
+    <!-- Login Section (Hidden by default) -->
+    <div id="loginSection" class="login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Faculty Login</h1>
+                <p>Aalim Muhammed Salegh College of Engineering</p>
+                <p>ERP Attendance Management System</p>
+            </div>
+
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="facultyId">Faculty ID</label>
+                    <input type="text" id="facultyId" placeholder="Enter your Faculty ID" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="facultyPassword">Password</label>
+                    <input type="password" id="facultyPassword" placeholder="Enter your password" required>
+                </div>
+
+                <button class="btn-login" onclick="attemptLogin()">Login</button>
+
+                <div id="loginError" class="login-error" style="display: none;">
+                    Invalid Faculty ID or password. Please try again.
+                </div>
+            </div>
+
+            <div class="login-footer">
+                <p>For demonstration purposes, use:</p>
+                <p><strong>Faculty ID:</strong> AMS001 | <strong>Password:</strong> faculty123</p>
+            </div>
+        </div>
+    </div>
+
+    <main id="mainContent" style="display: none;">
         <div class="erp-container">
             <!-- Faculty Controls -->
             <div class="faculty-controls">
@@ -333,12 +377,273 @@
                 <p>Saving attendance data...</p>
             </div>
         </div>
+
+        <!-- Student Details Modal -->
+        <div id="studentDetailsModal" class="modal">
+            <div class="modal-content student-details-modal">
+                <div class="modal-header">
+                    <span class="close" onclick="closeStudentDetailsModal()">&times;</span>
+                    <h2>Student Details</h2>
+                </div>
+                <div id="studentDetailsContent" class="student-details-content">
+                    <!-- Student details will be inserted here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeStudentDetailsModal()">Close</button>
+                    <button class="btn-primary" onclick="editStudent()">Edit Student</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Student Modal -->
+        <div id="addStudentModal" class="modal">
+            <div class="modal-content add-student-modal">
+                <div class="modal-header">
+                    <span class="close" onclick="closeAddStudentModal()">&times;</span>
+                    <h2 id="addStudentTitle">Add New Student</h2>
+                </div>
+                <form id="studentForm" class="student-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentRegNo">Register Number:</label>
+                            <input type="text" id="studentRegNo" name="regNo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentName">Full Name:</label>
+                            <input type="text" id="studentName" name="name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentAge">Age:</label>
+                            <input type="number" id="studentAge" name="age" min="15" max="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentCourse">Course:</label>
+                            <input type="text" id="studentCourse" name="course" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentAddress">Address:</label>
+                            <textarea id="studentAddress" name="address" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentPhone">Phone Number:</label>
+                            <input type="tel" id="studentPhone" name="phone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentDepartment">Department:</label>
+                            <input type="text" id="studentDepartment" name="department" value="Information Technology">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentYear">Year:</label>
+                            <select id="studentYear" name="year">
+                                <option value="I">I</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentSection">Section:</label>
+                            <select id="studentSection" name="section">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">Email:</label>
+                            <input type="email" id="studentEmail" name="email">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentHeight">Height (cm):</label>
+                            <input type="number" id="studentHeight" name="height" min="120" max="220">
+                        </div>
+                        <div class="form-group">
+                            <!-- Empty for layout -->
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeAddStudentModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Student List Section (Hidden by default) -->
+        <div id="studentListSection" class="student-list-section" style="display: none;">
+            <h2>Student Directory</h2>
+            <div class="student-grid">
+                <!-- Student cards will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Attendance History Section (Hidden by default) -->
+        <div id="attendanceHistorySection" class="attendance-history-section" style="display: none;">
+            <h2>Attendance History</h2>
+            <div class="history-controls">
+                <div class="control-group">
+                    <label for="historyStudentFilter">Student:</label>
+                    <select id="historyStudentFilter">
+                        <option value="all">All Students</option>
+                        <!-- Student options will be populated by JS -->
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="historyDateFrom">From Date:</label>
+                    <input type="date" id="historyDateFrom">
+                </div>
+                <div class="control-group">
+                    <label for="historyDateTo">To Date:</label>
+                    <input type="date" id="historyDateTo">
+                </div>
+                <button class="btn-primary" onclick="filterAttendanceHistory()">Filter</button>
+            </div>
+            <div class="history-table-container">
+                <table id="attendanceHistoryTable" class="erp-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Session</th>
+                            <th>Subject</th>
+                            <th>Total Students</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>OD</th>
+                            <th>Attendance Summary</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- History data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Section (Hidden by default) -->
+        <div id="reportsSection" class="reports-section" style="display: none;">
+            <h2>Reports & Analytics</h2>
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>Export to Excel</h3>
+                    <p>Download attendance data in Excel format</p>
+                    <button class="btn-export" onclick="exportToExcel()">
+                        <span class="btn-icon">📊</span>
+                        Export Attendance
+                    </button>
+                </div>
+                <div class="report-card">
+                    <h3>Attendance Report</h3>
+                    <p>View detailed attendance information</p>
+                    <button class="btn-primary" onclick="showAttendanceReport()">View Report</button>
+                </div>
+                <div class="report-card">
+                    <h3>Student Result</h3>
+                    <p>Academic performance and results</p>
+                    <button class="btn-primary" onclick="showStudentResultReport()">View Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Report Section (Hidden by default) -->
+        <div id="attendanceReportSection" class="attendance-report-section" style="display: none;">
+            <div class="report-header">
+                <h2>Attendance Report</h2>
+                <button class="btn-secondary" onclick="showSection('reports')">← Back to Reports</button>
+            </div>
+
+            <div class="report-filters">
+                <div class="control-group">
+                    <label for="summaryStudentFilter">Student:</label>
+                    <select id="summaryStudentFilter" onchange="filterAttendanceSummary()">
+                        <option value="all">All Students</option>
+                        <!-- Student options will be populated by JS -->
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="summaryDateFrom">From Date:</label>
+                    <input type="date" id="summaryDateFrom" onchange="filterAttendanceSummary()">
+                </div>
+                <div class="control-group">
+                    <label for="summaryDateTo">To Date:</label>
+                    <input type="date" id="summaryDateTo" onchange="filterAttendanceSummary()">
+                </div>
+                <div class="control-group">
+                    <label for="summarySubjectFilter">Subject:</label>
+                    <select id="summarySubjectFilter" onchange="filterAttendanceSummary()">
+                        <option value="all">All Subjects</option>
+                        <option value="Information Technology">Information Technology</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="summary-table-container">
+                <table id="attendanceSummaryTable" class="erp-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student Name</th>
+                            <th>Total Working Days</th>
+                            <th>Present Days</th>
+                            <th>Leave Taken</th>
+                            <th>Attendance %</th>
+                            <th>Morning Sessions</th>
+                            <th>Afternoon Sessions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Summary data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Student Performance Report Section (Hidden by default) -->
+        <div id="studentPerformanceSection" class="student-performance-section" style="display: none;">
+            <div class="report-header">
+                <h2>Student Performance Report</h2>
+                <button class="btn-secondary" onclick="showSection('reports')">← Back to Reports</button>
+            </div>
+
+            <div class="performance-filters">
+                <div class="control-group">
+                    <label for="performanceStudentFilter">Select Student:</label>
+                    <select id="performanceStudentFilter" onchange="showStudentPerformance()">
+                        <option value="">Choose a student...</option>
+                        <!-- Student options will be populated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <div id="performanceContent" class="performance-content" style="display: none;">
+                <!-- Student performance data will be inserted here -->
+            </div>
+
+            <div id="performancePlaceholder" class="performance-placeholder">
+                <div style="text-align: center; padding: 3rem; color: var(--erp-text-light);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <h3>Select a Student</h3>
+                    <p>Choose a student from the dropdown above to view their complete performance profile.</p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="erp-footer">
         <p>&copy; 2024 Aalim Muhammed Salegh College of Engineering - ERP Attendance Management System</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
